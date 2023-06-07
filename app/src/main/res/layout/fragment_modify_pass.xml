@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+    <com.example.friendcircle.widget.EnterInfoView
+        android:id="@+id/eiv_old_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"/>
+    <com.example.friendcircle.widget.EnterInfoView
+        android:id="@+id/eiv_new_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"/>
+    <com.example.friendcircle.widget.EnterInfoView
+        android:id="@+id/eiv_confirm_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"/>
+    <Button
+        android:id="@+id/btn_confirm"
+        style="@style/buttonStyle"
+        android:layout_marginTop="30dp"
+        android:text="确  认"/>
+</LinearLayout>

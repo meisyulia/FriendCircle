@@ -21,6 +21,7 @@
         <ImageView
             android:id="@+id/iv_search"
             style="@style/iv_image"
+            android:visibility="gone"
             android:src="@drawable/icon_search_40"
             android:layout_toLeftOf="@+id/iv_add"
             android:layout_marginRight="20dp"/>

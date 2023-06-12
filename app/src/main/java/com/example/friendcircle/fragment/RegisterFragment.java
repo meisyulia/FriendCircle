@@ -1,7 +1,6 @@
 package com.example.friendcircle.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -14,12 +13,9 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.friendcircle.MainActivity;
 import com.example.friendcircle.R;
 import com.example.friendcircle.database.UserHelper;
 import com.example.friendcircle.model.User;
-import com.example.friendcircle.util.DateUtil;
-import com.example.friendcircle.util.SharedUtil;
 import com.example.friendcircle.widget.EnterInfoView;
 
 import butterknife.BindView;

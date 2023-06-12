@@ -6,22 +6,26 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import java.util.ArrayList;
+
 @Table(database = AppDB.class)
-public class User extends BaseModel {
+public class SendCircle extends BaseModel {
     @PrimaryKey(autoincrement = true)
     private long id;
     @Column
-    private String avatar;
-    @Column
     private String username;
     @Column
-    private String password;
+    private String content;
     @Column
-    private String nickname;
+    private String picList;
     @Column
-    private String signature;
+    private String send_time;
     @Column
     private String extraOne;
+    @Column
+    private String extraTwo;
+    @Column
+    private String extraThree;
 
     public long getId() {
         return id;
@@ -29,14 +33,6 @@ public class User extends BaseModel {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
     }
 
     public String getUsername() {
@@ -47,28 +43,28 @@ public class User extends BaseModel {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getContent() {
+        return content;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getPicList() {
+        return picList;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setPicList(String picList) {
+        this.picList = picList;
     }
 
-    public String getSignature() {
-        return signature;
+    public String getSend_time() {
+        return send_time;
     }
 
-    public void setSignature(String signature) {
-        this.signature = signature;
+    public void setSend_time(String send_time) {
+        this.send_time = send_time;
     }
 
     public String getExtraOne() {
@@ -77,5 +73,21 @@ public class User extends BaseModel {
 
     public void setExtraOne(String extraOne) {
         this.extraOne = extraOne;
+    }
+
+    public String getExtraTwo() {
+        return extraTwo;
+    }
+
+    public void setExtraTwo(String extraTwo) {
+        this.extraTwo = extraTwo;
+    }
+
+    public String getExtraThree() {
+        return extraThree;
+    }
+
+    public void setExtraThree(String extraThree) {
+        this.extraThree = extraThree;
     }
 }

@@ -90,8 +90,8 @@ public class CustomRoundAngleImageView extends AppCompatImageView {
         int paddingBottom = getPaddingBottom();
         int widthNoPadding = getWidth() - paddingLeft - paddingRight;
         int heightNoPadding = getHeight() - paddingTop - paddingBottom;
-        Log.i(TAG, "onDraw: paddingLeft="+paddingLeft+",paddingRight="+paddingRight+",paddingTop="+paddingTop+",paddingBottom="+paddingBottom);
-        Log.i(TAG, "onDraw: minHeight="+minHeight+",minWidth="+minWidth+",radius="+radius+",width="+width+",height="+height);
+        //Log.i(TAG, "onDraw: paddingLeft="+paddingLeft+",paddingRight="+paddingRight+",paddingTop="+paddingTop+",paddingBottom="+paddingBottom);
+        //Log.i(TAG, "onDraw: minHeight="+minHeight+",minWidth="+minWidth+",radius="+radius+",width="+width+",height="+height);
         if (width >= minWidth && height >= minHeight) {
             Path path = new Path();
             //四个角：右上，右下，左下，左上

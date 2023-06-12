@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="pic_size">70dp</dimen>
+    <dimen name="pic_margin">15dp</dimen>
+    <dimen name="delete_icon_size">10dp</dimen>
+</resources>

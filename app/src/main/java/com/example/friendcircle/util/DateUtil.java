@@ -2,6 +2,7 @@ package com.example.friendcircle.util;
 
 import android.text.TextUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -73,6 +74,18 @@ public class DateUtil {
         time += diff_time;
         Date new_date = new Date(time);
         return sdf.format(new_date);
+    }
+
+    //转化成长整型
+    public static long getTime(String str) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Date date = sdf.parse(str);
+            return date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     //计算某天是星期几

@@ -1,24 +1,28 @@
 package com.example.friendcircle.util;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.View;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.example.friendcircle.widget.CustomRoundAngleImageView;
+import com.bumptech.glide.signature.ObjectKey;
 
 public class ImageUtil {
     private static final String TAG = "ImageUtil";
 
-    public static void loadAvatarImage(Context context, String imageUrl, ImageView view){
-        Log.i(TAG, "loadAvatarImage: view 是否是自定义的="+(view instanceof CustomRoundAngleImageView));
-        Glide.with(context).load(imageUrl).into(view);
-        /*if (view instanceof CustomRoundAngleImageView){
-            Glide.with(context).load(imageUrl).into(((CustomRoundAngleImageView) view));
+    //加载头像
+    public static void loadAvatarImage(Context context, String imageUrl, ImageView view,int resId){
+        if (TextUtils.isEmpty(imageUrl)){
+            //默认头像
+            Glide.with(context).load(resId)
+                    .signature(new ObjectKey(System.currentTimeMillis()));
         }else{
-            Glide.with(context).load(imageUrl).into(view);
-        }*/
+            Glide.with(context).load(imageUrl).signature(new ObjectKey(System.currentTimeMillis())).into(view);
+        }
 
+    }
+    //加载图片
+    public static void loadImage(Context context,String imageUrl,ImageView view){
+        Glide.with(context).load(imageUrl).into(view);
     }
 }

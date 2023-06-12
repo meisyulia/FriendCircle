@@ -1,20 +1,16 @@
 package com.example.friendcircle;
 
-import static com.example.friendcircle.fragment.PersonalFragment.REQUEST_CODE_CAMERA;
-import static com.example.friendcircle.fragment.PersonalFragment.REQUEST_CODE_SELECT;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
+
+import com.example.friendcircle.Constant.Constants;
 import com.example.friendcircle.Constant.MyFunType;
 import com.example.friendcircle.fragment.LogoutFragment;
 import com.example.friendcircle.fragment.ModifyPassFragment;
@@ -36,6 +32,8 @@ public class ClassifyActivity extends BaseActivity {
     FragmentContainerView fcv_classify;
     private MyFunType mSwitchPage;
     private String mSwitchTitle;
+    private int mPosition;
+    private String mCirName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +48,15 @@ public class ClassifyActivity extends BaseActivity {
     protected void initData() {
         mSwitchPage = (MyFunType) getIntent().getSerializableExtra("switch_page");
         mSwitchTitle = getIntent().getStringExtra("switch_title");
+        mPosition = getIntent().getIntExtra("position", -1);
+        mCirName = getIntent().getStringExtra("cir_name");
         Log.i(TAG, "initData: switch_page="+mSwitchPage+",switch_title="+mSwitchTitle);
     }
 
     @Override
     protected void initView() {
         iv_back.setOnClickListener(v->{
-            onBackPressed();
+           onBackPressed();
         });
         switchPage(mSwitchPage);
     }
@@ -72,7 +72,7 @@ public class ClassifyActivity extends BaseActivity {
                 break;
             case MY_FUN:
                 tv_head.setText(mSwitchTitle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fcv_classify,new MyFunFragment(),
+                getSupportFragmentManager().beginTransaction().replace(R.id.fcv_classify,MyFunFragment.newInstance(mPosition,mCirName),
                         MyFunFragment.class.getSimpleName()).commitAllowingStateLoss();
                 break;
             case SETTING:
@@ -103,14 +103,14 @@ public class ClassifyActivity extends BaseActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i(TAG, "onActivityResult: resultCode="+resultCode);
-        if (requestCode==REQUEST_CODE_SELECT && resultCode == RESULT_OK && data != null){
+        if (requestCode== Constants.REQUEST_CODE_SELECT && resultCode == RESULT_OK && data != null){
             //传给fragment
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(PersonalFragment.class.getSimpleName());
             if (fragment!= null){
                 fragment.onActivityResult(requestCode,resultCode,data);
             }
         }
-        if (requestCode==REQUEST_CODE_CAMERA && resultCode == RESULT_OK && data != null){
+        if (requestCode==Constants.REQUEST_CODE_CAMERA && resultCode == RESULT_OK && data != null){
             //传给fragment
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(PersonalFragment.class.getSimpleName());
             if (fragment!= null){

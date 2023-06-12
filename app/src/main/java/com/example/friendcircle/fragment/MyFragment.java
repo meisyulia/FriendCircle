@@ -3,10 +3,11 @@ package com.example.friendcircle.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,10 @@ import com.example.friendcircle.ClassifyActivity;
 import com.example.friendcircle.Constant.MyFunType;
 import com.example.friendcircle.R;
 import com.example.friendcircle.adapter.ClassifyAdapter;
+import com.example.friendcircle.database.UserHelper;
+import com.example.friendcircle.model.User;
+import com.example.friendcircle.util.ImageUtil;
+import com.example.friendcircle.util.SharedUtil;
 import com.example.friendcircle.widget.CustomRoundAngleImageView;
 
 import java.util.ArrayList;
@@ -31,6 +36,7 @@ import butterknife.Unbinder;
 
 public class MyFragment extends BaseFragment{
 
+    private static final String TAG = "MyFragment";
     @BindView(R.id.tv_nickname)
     TextView tv_nickname;
     @BindView(R.id.tv_signature)
@@ -46,6 +52,10 @@ public class MyFragment extends BaseFragment{
     private Context mContext;
     private Unbinder unbinder;
     private ArrayList<String> mClassify;
+    private SharedUtil mShared;
+    private String mUsername;
+    private UserHelper mUserHelper;
+    private User mUser;
 
     @Nullable
     @Override
@@ -61,6 +71,10 @@ public class MyFragment extends BaseFragment{
         mClassify = new ArrayList<>();
         mClassify.add("我的朋友圈");
         mClassify.add("我的好友");
+        mShared = SharedUtil.getInstance(mContext);
+        mUsername = mShared.readShared("username", "");
+        mUserHelper = new UserHelper();
+
     }
 
     @Override
@@ -75,8 +89,19 @@ public class MyFragment extends BaseFragment{
             Intent intent = new Intent(getActivity(), ClassifyActivity.class);
             intent.putExtra("switch_page", MyFunType.MY_FUN);
             intent.putExtra("switch_title",title);
+            intent.putExtra("position",position);
             startActivity(intent);
         }));
+    }
+
+    @Override
+    public void onResume() {
+        Log.i(TAG, "onResume: MyFra--resume");
+        super.onResume();
+        mUser = mUserHelper.selectByUsername(mUsername);
+        ImageUtil.loadAvatarImage(mContext,mUser.getAvatar(),cusiv_avatar,R.drawable.rect_avatar);
+        tv_nickname.setText(TextUtils.isEmpty(mUser.getNickname())?"~~~":mUser.getNickname());
+        tv_signature.setText(TextUtils.isEmpty(mUser.getSignature())?"~~~~~~":mUser.getSignature());
     }
 
     @Override

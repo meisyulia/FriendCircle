@@ -1,6 +1,8 @@
 package com.example.friendcircle.fragment;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.friendcircle.Constant.Constants.REQUEST_CODE_CAMERA;
+import static com.example.friendcircle.Constant.Constants.REQUEST_CODE_SELECT;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,12 +19,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.example.friendcircle.R;
 import com.example.friendcircle.database.UserHelper;
+import com.example.friendcircle.listener.OnDlgItemClickListener;
+import com.example.friendcircle.model.User;
 import com.example.friendcircle.util.ClickUtil;
-import com.example.friendcircle.util.ImagePickUtil;
 import com.example.friendcircle.util.ImageUtil;
 import com.example.friendcircle.util.SharedUtil;
 import com.example.friendcircle.widget.ContentView;
@@ -30,15 +32,6 @@ import com.example.friendcircle.widget.CustomRoundAngleImageView;
 import com.yuyh.library.imgsel.ISNav;
 import com.yuyh.library.imgsel.config.ISCameraConfig;
 import com.yuyh.library.imgsel.config.ISListConfig;
-//import com.example.image.ISNav;
-//import com.example.image.model.config.ISCameraConfig;
-//import com.example.image.model.config.ISListConfig;
-import com.yuyh.library.imgsel.ISNav;
-import com.yuyh.library.imgsel.config.ISCameraConfig;
-import com.yuyh.library.imgsel.config.ISListConfig;
-/*import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImageGridActivity;*/
 
 import java.util.ArrayList;
 
@@ -47,7 +40,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class PersonalFragment extends BaseFragment implements PickPicDlgFragment.OnItemClickListener {
+public class PersonalFragment extends BaseFragment implements  OnDlgItemClickListener {
 
     private static final String TAG = "PersonalFragment";
     @BindView(R.id.tv_avatar)
@@ -72,9 +65,10 @@ public class PersonalFragment extends BaseFragment implements PickPicDlgFragment
     private Unbinder unbinder;
     private UserHelper mUserHelper;
     private SharedUtil mShared;
-    public static final int REQUEST_CODE_SELECT = 100;
-    public static final int REQUEST_CODE_CAMERA = 101;
     private String mAvatarUrl;
+    private String mUsername;
+    private String mPassword;
+    private User mUser;
     /* private ArrayList<ImageItem> selImageList= new ArrayList<>(); //当前选择的所有图片
     ArrayList<ImageItem> images = null;*/
 
@@ -90,16 +84,25 @@ public class PersonalFragment extends BaseFragment implements PickPicDlgFragment
     @Override
     protected void initData() {
         mShared = SharedUtil.getInstance(mContext);
-        mUserHelper = new UserHelper();
+        mUsername = mShared.readShared("username", "");
+        mPassword = mShared.readShared("password", "");
         /*ImagePicker imagePicker = ImagePickUtil.initUpdateAvatar();*/
+        mUserHelper = new UserHelper();
+        mUser = mUserHelper.selectByUsername(mUsername);
     }
 
     @Override
     protected void initView() {
-        cv_username.initItem("账号",mShared.readShared("username",""));
-        cv_nickname.initItem("昵称","~~~");
+        ImageUtil.loadAvatarImage(mContext,mUser.getAvatar(),cusiv_avatar,R.drawable.rect_avatar);
+        /*if (TextUtils.isEmpty(mUser.getAvatar())){
+            cusiv_avatar.setImageResource(R.drawable.rect_avatar);
+        }else{
+            ImageUtil.loadAvatarImage(mContext,mUser.getAvatar(),cusiv_avatar);
+        }*/
+        cv_username.initItem("账号",mUsername);
+        cv_nickname.initItem("昵称",TextUtils.isEmpty(mUser.getNickname())?"~~~":mUser.getNickname());
         cv_nickname.setEditable(true);
-        cv_signature.initItem("个性签名","~~~~~~");
+        cv_signature.initItem("个性签名",TextUtils.isEmpty(mUser.getSignature())?"~~~~~~":mUser.getSignature());
         cv_signature.setEditable(true);
         cv_login_time.initItem("登陆时间",mShared.readShared("login_time",""));
     }
@@ -117,8 +120,25 @@ public class PersonalFragment extends BaseFragment implements PickPicDlgFragment
                 updateAvatar(view);
                 break;
             case R.id.btn_save:
+                savePerInfo();
                 break;
         }
+    }
+
+    private void savePerInfo() {
+        String nickname = cv_nickname.getEditContent();
+        String signature = cv_signature.getEditContent();
+        if (!TextUtils.isEmpty(mAvatarUrl)){
+           mUser.setAvatar(mAvatarUrl);
+        }
+        mUser.setNickname(nickname);
+        mUser.setSignature(signature);
+        mUser.save();
+        showTips("保存成功");
+        /*Intent intent = new Intent(mContext, MainActivity.class);
+        intent.putExtra("switch_page",1);
+        startActivity(intent);*/
+        getActivity().onBackPressed();
     }
 
     private void updateAvatar(View view) {
@@ -164,7 +184,7 @@ public class PersonalFragment extends BaseFragment implements PickPicDlgFragment
         intent.putExtra(ImageGridActivity.EXTRAS_TAKE_PICKERS, true); // 是否是直接打开相机
         startActivityForResult(intent, REQUEST_CODE_SELECT);*/
         ISCameraConfig cameraConfig = new ISCameraConfig.Builder()
-                .needCrop(false) // 裁剪
+                .needCrop(true) // 裁剪
                 .cropSize(1, 1, 500, 500)
                 .build();
         ISNav.getInstance().toCameraActivity(requireContext(), cameraConfig, REQUEST_CODE_CAMERA);
@@ -174,27 +194,14 @@ public class PersonalFragment extends BaseFragment implements PickPicDlgFragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i(TAG, "Frag onActivityResult: resultCode="+resultCode);
-        /*if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
-            if (data != null && requestCode == REQUEST_CODE_SELECT) {
-                images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                if (images != null) {
-                    selImageList.addAll(images);
-                    if (selImageList.size()>0){
-                        ImageItem imageItem = selImageList.get(0);
-                        Log.i(TAG, "onActivityResult: imageItem.path="+imageItem.path);
-                    }
-
-                    //adapter.setImages(selImageList);
-                }
-            }
-        }*/
         if (requestCode==REQUEST_CODE_SELECT && resultCode == RESULT_OK && data != null){
             ArrayList<String> pathList = data.getStringArrayListExtra("result");
             if (pathList!=null){
                 Log.i(TAG, "onActivityResult: pathList.size()="+pathList.size());
                 mAvatarUrl = pathList.get(0);
                 //Log.i(TAG, "onActivityResult: mAvatarUrl="+mAvatarUrl);
-                ImageUtil.loadAvatarImage(mContext,mAvatarUrl,cusiv_avatar);
+                /*ImageUtil.loadAvatarImage(mContext,mAvatarUrl,cusiv_avatar);*/
+                ImageUtil.loadAvatarImage(mContext,mAvatarUrl,cusiv_avatar,R.drawable.rect_avatar);
             }
         }
         if (requestCode==REQUEST_CODE_CAMERA && resultCode == RESULT_OK && data != null){
@@ -202,7 +209,8 @@ public class PersonalFragment extends BaseFragment implements PickPicDlgFragment
             if (!TextUtils.isEmpty(path)){
                 mAvatarUrl = path;
                 //Log.i(TAG, "onActivityResult: mAvatarUrl="+mAvatarUrl);
-                ImageUtil.loadAvatarImage(mContext,mAvatarUrl,cusiv_avatar);
+                /*ImageUtil.loadAvatarImage(mContext,mAvatarUrl,cusiv_avatar);*/
+                ImageUtil.loadAvatarImage(mContext,mAvatarUrl,cusiv_avatar,R.drawable.rect_avatar);
             }
         }
     }

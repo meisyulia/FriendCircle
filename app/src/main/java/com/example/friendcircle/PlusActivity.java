@@ -1,19 +1,18 @@
 package com.example.friendcircle;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentContainerView;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
+
+import com.example.friendcircle.Constant.Constants;
 import com.example.friendcircle.Constant.PlusType;
 import com.example.friendcircle.fragment.AddFriendFragment;
-import com.example.friendcircle.fragment.BaseFragment;
 import com.example.friendcircle.fragment.SendCircleFragment;
-
-import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +48,7 @@ public class PlusActivity extends BaseActivity {
         switchPage(mSwitchPage);
         iv_back.setOnClickListener(v->{
             onBackPressed();
+            //finish();
         });
 
     }
@@ -65,6 +65,26 @@ public class PlusActivity extends BaseActivity {
                 getSupportFragmentManager().beginTransaction().
                         replace(R.id.fcv_plus,new SendCircleFragment(),SendCircleFragment.class.getSimpleName()).commitAllowingStateLoss();
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, "onActivityResult: resultCode="+resultCode);
+        if (requestCode== Constants.REQUEST_CODE_SELECT && resultCode == RESULT_OK && data != null){
+            //传给fragment
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(SendCircleFragment.class.getSimpleName());
+            if (fragment!= null){
+                fragment.onActivityResult(requestCode,resultCode,data);
+            }
+        }
+        if (requestCode==Constants.REQUEST_CODE_CAMERA && resultCode == RESULT_OK && data != null){
+            //传给fragment
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(SendCircleFragment.class.getSimpleName());
+            if (fragment!= null){
+                fragment.onActivityResult(requestCode,resultCode,data);
+            }
         }
     }
 }

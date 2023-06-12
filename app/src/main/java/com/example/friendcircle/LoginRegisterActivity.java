@@ -1,14 +1,16 @@
 package com.example.friendcircle;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentContainerView;
-
+import android.Manifest;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.fragment.app.FragmentContainerView;
 
 import com.example.friendcircle.fragment.LoginFragment;
 import com.example.friendcircle.fragment.RegisterFragment;
+import com.example.friendcircle.util.PermissionUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +36,18 @@ public class LoginRegisterActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        checkAllPermission();
+    }
 
+    private void checkAllPermission() {
+        boolean isPermission = PermissionUtil.checkMultiPermission(this, new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA
+        }, 4096);
+        if (!isPermission){
+            Toast.makeText(this, "需要允许权限才能正常使用哦", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

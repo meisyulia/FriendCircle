@@ -24,10 +24,19 @@ public class SharedUtil {
         editor.putString(key, value); // 添加一个指定键名的字符串参数
         editor.commit(); // 提交编辑器中的修改
     }
+    public void writeShared(String key,long value){
+        SharedPreferences.Editor editor = mShared.edit(); // 获得编辑器的对象
+        editor.putLong(key, value); // 添加一个指定键名的字符串参数
+        editor.commit(); // 提交编辑器中的修改
+    }
 
     // 根据键名到共享参数中查找对应的值对象
     public String readShared(String key, String defaultValue) {
         return mShared.getString(key, defaultValue);
+    }
+
+    public long readShared(String key, long defaultValue) {
+        return mShared.getLong(key, defaultValue);
     }
 
 }

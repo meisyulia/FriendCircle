@@ -1,29 +1,20 @@
 package com.example.friendcircle;
 
-import static com.example.friendcircle.fragment.PersonalFragment.REQUEST_CODE_CAMERA;
-import static com.example.friendcircle.fragment.PersonalFragment.REQUEST_CODE_SELECT;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.Manifest;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.example.friendcircle.adapter.MainFragPagerAdapter;
 import com.example.friendcircle.fragment.FriCirFragment;
 import com.example.friendcircle.fragment.MyFragment;
-import com.example.friendcircle.fragment.PersonalFragment;
 import com.example.friendcircle.util.PermissionUtil;
-//import com.lzy.imagepicker.ImagePicker;
-//import com.lzy.imagepicker.bean.ImageItem;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import butterknife.BindView;
@@ -58,6 +49,7 @@ public class MainActivity extends BaseActivity {
         mFragmentList.add(new MyFragment());
         //检测所有权限
         checkAllPermission();
+
     }
 
     private void checkAllPermission() {
@@ -69,6 +61,14 @@ public class MainActivity extends BaseActivity {
         if (!isPermission){
             Toast.makeText(this, "需要允许权限才能正常使用哦", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /*int switch_page = getIntent().getIntExtra("switch_page", 0);
+        changePager(switch_page);
+        vp_main_contain.setCurrentItem(switch_page);*/
     }
 
     @Override

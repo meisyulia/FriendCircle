@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import butterknife.Unbinder;
 
 public class LoginFragment extends BaseFragment{
 
+    private static final String TAG = "LoginFragment";
     @BindView(R.id.eiv_username)
     EnterInfoView eiv_username;
     @BindView(R.id.eiv_password)
@@ -83,6 +85,8 @@ public class LoginFragment extends BaseFragment{
         }
         //写入共享
         SharedUtil shared = SharedUtil.getInstance(mContext);
+        shared.writeShared("id",user.getId());
+        Log.i(TAG, "loginClick: id="+user.getId());
         shared.writeShared("username",username);
         shared.writeShared("password",password);
         shared.writeShared("login_time", DateUtil.getNowDateTimeFormat());

@@ -1,33 +1,23 @@
 package com.example.friendcircle.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.friendcircle.R;
-import com.example.friendcircle.util.ImagePickUtil;
+import com.example.friendcircle.listener.OnDlgItemClickListener;
 import com.example.friendcircle.util.Utils;
-/*import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImageGridActivity;*/
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +37,7 @@ public class PickPicDlgFragment extends DialogFragment {
     TextView tv_cancel;
     private Context mContext;
     private Unbinder unbinder;
-    private OnItemClickListener onItemClickListener;
+    private OnDlgItemClickListener onItemClickListener;
 
     public static PickPicDlgFragment newInstance(){
         if (pickPicDlgFragment != null && pickPicDlgFragment.isResumed()){
@@ -110,12 +100,9 @@ public class PickPicDlgFragment extends DialogFragment {
 
 
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+    public void setOnItemClickListener(OnDlgItemClickListener onItemClickListener){
         this.onItemClickListener = onItemClickListener;
     }
 
-    public interface OnItemClickListener{
-        void onSelectPhotos();
-        void onOpenCamera();
-    }
+
 }
